@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'com.aliexpress'
+group 'guru.qa'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,10 +10,12 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testImplementation 'com.codeborne:selenide:6.12.2'
+    implementation 'com.opencsv:opencsv:5.5.2'
+
 }
 
-test {
-    useJUnitPlatform()
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
