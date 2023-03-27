@@ -1,13 +1,15 @@
 package com.aliexpress.utils;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class readArrayFromCsv {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CsvValidationException {
         String filePath = "LocalizationButtonsData.csv";
 
         CSVReader csvReader = new CSVReader(new FileReader(filePath));

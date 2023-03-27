@@ -5,12 +5,14 @@ import com.codeborne.selenide.ElementsCollection;
 import com.aliexpress.data.Locale;
 import com.aliexpress.pages.HomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
@@ -22,18 +24,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class LocalizationTest {
 
-
     HomePage homePage = new HomePage();
     ElementsCollection buttonList = homePage.returnButtonList();
-
-    static Stream<Arguments> siteShouldContainAllOfTheGivenButtonsForGivenLocale() {
-        return Stream.of(
-                Arguments.of(Locale.en_US, List.of("Sell on Aliexpress", "Cookie Preferences", "Help",
-                        "Buyer Protection", "App", "/ English / EUR", "Wish List", "Account")),
-                Arguments.of(Locale.es_ES, List.of("Vende en AliExpress", "Configuración de privacidad", "Ayuda",
-                        "Protección del comprador", "App", "/ Español / EUR", "Lista de Deseos", "Mi Cuenta"))
-        );
-    }
 
     @BeforeAll
     static void configure() {
@@ -43,12 +35,38 @@ public class LocalizationTest {
         open("https://aliexpress.com/");
     }
 
-    @BeforeEach
+    @AfterEach
     void declineSubscriptionAfterEachCheck() {
-//        aliexpressPage.declineSubscription();
+        homePage.declineSubscription();
     }
 
-    @MethodSource
+    static Stream<Arguments> siteShouldContainAllButtonsUsingStreamTest() {
+        return Stream.of(
+                Arguments.of(Locale.en_US, List.of("Sell on Aliexpress", "Cookie Preferences", "Help",
+                        "Buyer Protection", "App", "/ English / EUR", "Wish List", "Account")),
+                Arguments.of(Locale.es_ES, List.of("Vende en AliExpress", "Configuración de privacidad", "Ayuda",
+                        "Protección del comprador", "App", "/ Español / EUR", "Lista de Deseos", "Mi Cuenta"))
+        );
+    }
+
+    @MethodSource("siteShouldContainAllButtonsUsingStreamTest")
+    @ParameterizedTest(name = "For language {0} on website https://aliexpress.com/ must be visible the list of buttons {1}")
+    @Test
+    void siteShouldContainAllButtonsUsingStreamTest(Enum locale, List<String> expectedButtons) {
+        homePage
+                .changeLanguage(locale.toString())
+                .acceptCookies()
+                .declineSubscription();
+        buttonList.filter(visible).shouldHave(texts(expectedButtons));
+    }
+
+    @CsvSource({
+            "en_US,Sell on Aliexpress,  Cookie Preferences,          Help, Buyer Protection,        App,/ English / EUR,  Wish List,       Account",
+            "pt_BR,Vender no aliexpress,Configurações De Privacidade,Ajuda,Proteção ao Consumidor,  App,/ Português / EUR,Lista de Desejos,Minha Conta",
+            "es_ES,Vende en AliExpress, Configuración de privacidad, Ayuda,Protección del comprador,App,/ Español / EUR,  Lista de Deseos, Mi Cuenta"
+
+    } )
+
     @ParameterizedTest(name = "For language {0} on website https://aliexpress.com/ must be visible the list of buttons {1}")
     void siteShouldContainAllOfTheGivenButtonsForGivenLocale(Enum localeAliexpress, List<String> expectedButtons) {
         homePage
@@ -57,7 +75,6 @@ public class LocalizationTest {
                 .declineSubscription();
         buttonList.filter(visible).shouldHave(texts(expectedButtons));
     }
-
 
     @DisplayName("Тест с использованием .csv файла")
     @CsvFileSource(resources = "/LocalizationButtonsData.csv", numLinesToSkip = 0)
