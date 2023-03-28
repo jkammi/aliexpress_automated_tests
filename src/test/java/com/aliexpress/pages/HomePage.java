@@ -18,10 +18,8 @@ public class HomePage {
             declineSubscriptionButton = $(".Sk1_X._1-SOk"),
             languageCurrencyButton = $(By.cssSelector("a#switcher-info")),
             chooseLanguageButton = $(byClassName("switcher-currency-c")),
-            saveButton = $("button[data-role=save]"),
-            buttonList = $(By.cssSelector("div.nav-global#nav-global")),
-            buttonSeparator = $(".ng-item");
-
+            saveButton = $("button[data-role=save]");
+    ElementsCollection buttonList  = $$("#nav-global .ng-item");
 
     public HomePage openPage() {
         WebDriverManager.chromedriver().setup();
@@ -51,8 +49,8 @@ public class HomePage {
         return this;
     }
 
-    public ElementsCollection returnButtonList() {
-        return buttonList.$$(By.cssSelector(".ng-item"));
+    public ElementsCollection getButtonList() {
+        return buttonList;
     }
 
 
