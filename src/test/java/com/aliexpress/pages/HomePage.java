@@ -10,7 +10,6 @@ import static com.codeborne.selenide.Selectors.by;
 import static com.codeborne.selenide.Selectors.byClassName;
 import static com.codeborne.selenide.Selenide.*;
 
-
 public class HomePage {
 
     private SelenideElement
@@ -19,7 +18,7 @@ public class HomePage {
             languageCurrencyButton = $(By.cssSelector("a#switcher-info")),
             chooseLanguageButton = $(byClassName("switcher-currency-c")),
             saveButton = $("button[data-role=save]");
-    ElementsCollection buttonList  = $$("#nav-global .ng-item");
+    ElementsCollection buttonList = $$("#nav-global .ng-item");
 
     public HomePage openPage() {
         WebDriverManager.chromedriver().setup();
@@ -52,6 +51,5 @@ public class HomePage {
     public ElementsCollection getButtonList() {
         return buttonList;
     }
-
 
 }
