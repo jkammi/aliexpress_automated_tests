@@ -72,21 +72,22 @@ public class LocalizationTest {
                 .changeLanguage(locale)
                 .acceptCookies()
                 .declineSubscription();
-        String[] subarray = { button1, button2, button3, button4, button5, button6, button7, button8 };
+        String[] subarray = {button1, button2, button3, button4, button5, button6, button7, button8};
         sleep(500);
         buttonList.filter(visible).shouldHave(exactTexts(subarray));
     }
 
-
     @DisplayName("Тест с использованием .csv файла")
-    @CsvFileSource(resources = "LocalizationButtonsData.csv", numLinesToSkip = 0)
-    @ParameterizedTest(name = "For language {0} on website aliexpress.com must be visible the list of buttons {1}")
-    void siteShouldContainAllOfTheGivenButtonsFromSCV(String locale, String button1, String button2, String button3, String button4, String button5, String button6, String button7, String button8) {
+    @CsvFileSource(resources = "/LocalizationButtonsData.csv", numLinesToSkip = 0)
+    @ParameterizedTest(name = "For language {0} on website aliexpress.com must be visible the list of buttons {1},{2},{3},{4},{5},{6},{7}")
+    void siteShouldContainAllOfTheGivenButtonsFromSCV(String locale, String button1, String button2,
+                                                      String button3, String button4, String button5,
+                                                      String button6, String button7, String button8) {
         homePage
                 .changeLanguage(locale)
                 .acceptCookies()
                 .declineSubscription();
-        String[] subarray = { button1, button2, button3, button4, button5, button6, button7, button8 };
+        String[] subarray = {button1, button2, button3, button4, button5, button6, button7, button8};
         sleep(500);
         buttonList.filter(visible).shouldHave(exactTexts(subarray));
     }
